@@ -119,11 +119,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 float vertical = CrossPlatformInputManager.GetAxis("Vertical");
                 if(vertical > 0)
                 {
-                    m_MoveDir.y = speed;
+                    m_MoveDir.y = m_JumpSpeed;
                 }
                 else if (vertical < 0)
                 {
-                    m_MoveDir.y = -speed;
+                    m_MoveDir.y = -m_JumpSpeed;
                 }
             }
 
@@ -366,7 +366,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     }
                     break;
                 case moveState.climbing:
-                    speed = m_WalkSpeed * 0.8f;
+                    speed = 0;
                     break;
                 case moveState.sliding:
                     speed = m_RunSpeed * 2.0f;
