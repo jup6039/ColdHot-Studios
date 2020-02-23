@@ -14,6 +14,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private moveState movementState = moveState.walking;
         //[SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
+        [SerializeField] private float m_ClimbSpeed;
         [SerializeField] private float m_RunSpeed;
         [SerializeField] private float m_slideTime;
         [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
@@ -119,11 +120,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 float vertical = CrossPlatformInputManager.GetAxis("Vertical");
                 if(vertical > 0)
                 {
-                    m_MoveDir.y = m_JumpSpeed;
+                    m_MoveDir.y = m_ClimbSpeed;
                 }
                 else if (vertical < 0)
                 {
-                    m_MoveDir.y = -m_JumpSpeed;
+                    m_MoveDir.y = -m_ClimbSpeed;
                 }
             }
 
@@ -299,7 +300,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             else if (movementState != moveState.jumping || movementState != moveState.climbing)
             {
                 //tick up slide timer
-                timeSlid += Time.deltaTime;
+                timeSlid += m_slideTime/55.0f;
 
                 //if jump cancel slide to go to jump
                 if (CrossPlatformInputManager.GetButtonDown("Jump"))
