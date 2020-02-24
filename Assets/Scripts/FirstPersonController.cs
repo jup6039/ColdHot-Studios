@@ -15,6 +15,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         //[SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
         [SerializeField] private float m_ClimbSpeed;
+        private bool canClimb;
+        private bool hitClimbable;
         [SerializeField] private float m_RunSpeed;
         [SerializeField] private float m_slideTime;
         [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
@@ -67,6 +69,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Update is called once per frame
         private void Update()
         {
+            if (movementState == moveState.sliding)
+            {
+                //tick up slide timer
+                timeSlid += Time.deltaTime;
+            }
             RotateView();
             // the jump state needs to read here to make sure it is not missed
             /*if (movementState != moveState.jumping)
@@ -80,7 +87,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 StartCoroutine(m_JumpBob.DoBobCycle());
                 PlayLandingSound();
                 m_MoveDir.y = 0f;
-                movementState = moveState.walking;
+                if (movementState != moveState.sliding)
+                {
+                    movementState = moveState.walking;
+                }
             }
             if (!m_CharacterController.isGrounded && movementState != moveState.jumping && m_PreviouslyGrounded)
             {
@@ -101,7 +111,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void FixedUpdate()
         {
-            
+            checkClimb();
+
             float speed;
             GetInput(out speed);
 
@@ -124,12 +135,17 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 }
                 else if (vertical < 0)
                 {
-                    m_MoveDir.y = -m_ClimbSpeed;
+                        m_MoveDir.y = -m_ClimbSpeed;
+                }
+                else
+                {
+                    m_MoveDir.y = 0;
                 }
             }
 
             //else perform normal movement
-            {
+            else
+            {  
                 // always move along the camera forward as it is the direction that it being aimed at
                 Vector3 desiredMove = transform.forward * m_Input.y + transform.right * m_Input.x;
 
@@ -141,7 +157,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
                 m_MoveDir.x = desiredMove.x * speed;
                 m_MoveDir.z = desiredMove.z * speed;
-
 
                 if (m_CharacterController.isGrounded)
                 {
@@ -157,9 +172,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 {
                     m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
                 }
-                m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
+            }             
 
-            }
+            m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
             ProgressStepCycle(speed);
             UpdateCameraPosition(speed);
@@ -196,7 +211,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void PlayFootStepAudio()
         {
-            if (!m_CharacterController.isGrounded)
+            if (!m_CharacterController.isGrounded || movementState == moveState.sliding)
             {
                 return;
             }
@@ -241,13 +256,42 @@ namespace UnityStandardAssets.Characters.FirstPerson
             float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
             float vertical = CrossPlatformInputManager.GetAxis("Vertical");
 
-            moveState waswalking = movementState;
+
             // keep track of characters movement state
+            moveState waswalking = movementState;
 
-            //if character is not sliding or jumping alter state based on key press
-            if (movementState != moveState.sliding || movementState != moveState.jumping || movementState != moveState.climbing)
+            //if crouching cannot stand if something above head
+            if (waswalking == moveState.crouching)
             {
-
+                if (canStand())
+                {
+                    if (CrossPlatformInputManager.GetButtonDown("Jump"))
+                    {
+                        Debug.Log("jump");
+                        movementState = moveState.jumping;
+                        runJump = false;
+                    }
+                    else if(!Input.GetKey(KeyCode.LeftControl))
+                    {
+                        Debug.Log("walk");
+                        movementState = moveState.walking;
+                    }
+                    else
+                    {
+                        Debug.Log("standing crouch");
+                        movementState = moveState.crouching;
+                    }
+                }
+                else
+                {
+                    Debug.Log("crouching crouch");
+                    movementState = moveState.crouching;
+                }
+                
+            }
+            //if character is not sliding or jumping alter state based on key press
+            else if (waswalking != moveState.sliding && waswalking != moveState.jumping && waswalking != moveState.climbing)
+            {
                 //if holding down left shift switch to running, if left shift and other keys are held, prioritize other motion
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -262,6 +306,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 {
                     if (waswalking == moveState.running)
                     {
+                        timeSlid = 0;
                         movementState = moveState.sliding;
                     }
                     else if (waswalking == moveState.walking)
@@ -277,9 +322,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 }
 
                 //if can climb and vertical motion then climb
-                if(canClimb() && vertical != 0)
+                if(canClimb)
                 {
-                    movementState = moveState.climbing;
+                    if (vertical > 0 || (vertical < 0 && !m_CharacterController.isGrounded))
+                    {
+                        movementState = moveState.climbing;
+                    }
                 }
                 //if press jump button jump
                 if (CrossPlatformInputManager.GetButtonDown("Jump"))
@@ -297,11 +345,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 }
             }
             //if sliding case
-            else if (movementState != moveState.jumping || movementState != moveState.climbing)
+            else if (waswalking != moveState.jumping && waswalking != moveState.climbing)
             {
-                //tick up slide timer
-                timeSlid += m_slideTime/55.0f;
-
                 //if jump cancel slide to go to jump
                 if (CrossPlatformInputManager.GetButtonDown("Jump"))
                 {
@@ -325,22 +370,43 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     {
                         movementState = moveState.walking;
                     }
+
+                    //if cannot stand defaults to crouch
+                    if(!canStand())
+                    {
+                        movementState = moveState.crouching;
+                    }
                 }
             }
-            //if climbing exit climb on jump
-            else if (movementState != moveState.jumping)
+            //if climbing exit climb on jump or backwards movement on ground
+            else if (waswalking != moveState.jumping)
             {
                 if (CrossPlatformInputManager.GetButtonDown("Jump"))
                 {
                     movementState = moveState.jumping;
                     runJump = false;
                 }
-                else if (!canClimb())
+                else if (m_CharacterController.isGrounded && vertical < 0)
                 {
                     movementState = moveState.walking;
                 }
+                else if (!canClimb)
+                {
+                    movementState = moveState.walking;
+                }
+                
             }
-            //movement state does not change if was previously jumping, only changes on land trigger
+            //jump case, only switch if move to climb
+            else
+            {
+                if (canClimb)
+                {
+                    if (vertical != 0)
+                    {
+                        movementState = moveState.climbing;
+                    }
+                }
+            }
 
             // set the desired speed to be walking or running
             speed = m_WalkSpeed;
@@ -404,24 +470,29 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MouseLook.LookRotation (transform, m_Camera.transform);
         }
 
-        private bool canClimb()
+        //sets canclimb to true if collided with a climbable object this fixedupdate
+        private void checkClimb()
         {
-            Vector3 forward = transform.TransformDirection(Vector3.forward);
-            Transform rayTransform = transform;
-            float yvalue = rayTransform.position.y;
-            yvalue -= 0.5f;
-            rayTransform.position = new Vector3(rayTransform.position.x, yvalue, rayTransform.position.z);
-
-            RaycastHit cast;
-            if(Physics.Raycast(rayTransform.position, forward, out cast, 1))
+            canClimb = false;
+            if(hitClimbable)
             {
-                if (cast.collider.tag == "climbable")
-                {
-                    Debug.Log("can climb");
-                    return true;
-                }
+                canClimb = true;
+                hitClimbable = false;
             }
-            return false;
+
+        }
+        
+        //checks to see if there is something above the players crouched state
+        private bool canStand()
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), out hit, 1.5f))
+            {
+                Debug.Log("can not stand");
+                return false;
+            }
+            Debug.Log("can stand");
+            return true;
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -435,11 +506,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 return;
             }
 
-            //exit slide on hits
-            if (movementState == moveState.sliding)
+            //if climbable set climb to true
+            if (hit.gameObject.tag == "climbable" && m_CollisionFlags == CollisionFlags.Sides)
             {
-                movementState = moveState.walking;
+                hitClimbable = true;
+
+                //exit slide on hits
+                if (movementState == moveState.sliding)
+                {
+                    movementState = moveState.walking;
+                }
             }
+
             if (body == null || body.isKinematic)
             {
                 return;
