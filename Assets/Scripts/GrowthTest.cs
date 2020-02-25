@@ -30,6 +30,11 @@ public class GrowthTest : MonoBehaviour
         {
             increaseSize(0.3f, 11f);
         }
+
+        if(Input.GetKey(KeyCode.V))
+        {
+            increaseSize(-0.2f);
+        }
     }
 
     //increaseSize method increases the size of an object and moves it along its forward causing it to grow in a direction
@@ -84,11 +89,26 @@ public class GrowthTest : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 rayDirection = transform.up.normalized;
+        Vector3 raystart = transform.position;
+        raystart = raystart - (rayDirection * scale.y);
         if(Physics.Raycast(transform.position, rayDirection, out hit, distance + (scale.y)))
         {
             shotObject = hit.collider.gameObject;
             return hit.distance - (scale.y);
         }
         return -1;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("collide");
+        //get current length
+        float currentLength = scale.y;
+        //set scale to 0
+        increaseSize(-1 * currentLength, 0.0f);
+        
+        //increase size back up to length
+        increaseSize(currentLength);
+        
     }
 }
