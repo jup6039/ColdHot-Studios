@@ -33,5 +33,8 @@ public class Tool : MonoBehaviour
     void AddSlot(Slot.inputType _inputType, Slot.slotType _subtype)
     {
         // Add a slot to the tool
+        Slot newSlot = new Slot(_inputType, _subtype); // create a new slot object
+
+        slotList.Add(newSlot);
     }
 }

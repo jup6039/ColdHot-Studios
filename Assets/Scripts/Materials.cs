@@ -5,9 +5,10 @@ using UnityEngine;
 public class Materials : MonoBehaviour
 {
     // Variables
-    enum type { gold, silver, others}
+    public enum type { gold, steel, bronze, brass, copper, iron}
 
-    public List<string> effect = new List<string>();
+    public type matType; // type of the material
+    public List<string> effect = new List<string>(); // list of material's effects
 
     // Start is called before the first frame update
     void Start()
@@ -19,5 +20,10 @@ public class Materials : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public Materials(type _type)
+    {
+        matType = _type;
     }
 }
