@@ -28,4 +28,9 @@ public class MoveOnArrow : MonoBehaviour
             transform.position = location;
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("cube collided");
+    }
 }

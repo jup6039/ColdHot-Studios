@@ -35,6 +35,11 @@ public class GrowthTest : MonoBehaviour
         {
             increaseSize(-0.2f);
         }
+        
+        if(Input.GetKey(KeyCode.G))
+        {
+            scaleToZero();
+        }
     }
 
     //increaseSize method increases the size of an object and moves it along its forward causing it to grow in a direction
@@ -99,13 +104,24 @@ public class GrowthTest : MonoBehaviour
         return -1;
     }
 
+    private void scaleToZero()
+    {
+        Vector3 move = transform.up.normalized;
+        move = move * -scale.y;
+        location += move;
+        transform.position = location;
+        scale.y -= scale.y;
+        transform.localScale = scale;
+
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("collide");
         //get current length
         float currentLength = scale.y;
         //set scale to 0
-        increaseSize(-1 * currentLength, 0.0f);
+        scaleToZero();
         
         //increase size back up to length
         increaseSize(currentLength);
