@@ -7,7 +7,7 @@ public class Mods : Materials
     // Variables
     public Slot.slotType subtype;
 
-    public Mods(Slot.slotType subtype, Materials.type _type) : base(_type)
+    public Mods(Slot.slotType subtype, string _type, List<string> _effect) : base(_type, _effect)
     {
         this.subtype = subtype;
     }
