@@ -6,10 +6,12 @@ public class Mods : Materials
 {
     // Variables
     public Slot.slotType subtype;
+    public string modKey;
 
-    public Mods(Slot.slotType subtype, string _type, List<string> _effect) : base(_type, _effect)
+    public Mods(Slot.slotType _subtype, string _type, List<string> _effect) : base(_type, _effect)
     {
-        this.subtype = subtype;
+        this.subtype = _subtype;
+        modKey = _type + "," + _subtype;
     }
 
     // Start is called before the first frame update

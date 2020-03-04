@@ -410,7 +410,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTools: []
-  playerMods: []
   equippedTool: {fileID: 0}
 --- !u!1001 &2137253716
 PrefabInstance:

@@ -9,7 +9,7 @@ public class PlayerInventory : MonoBehaviour
     // VARIABLES
     public List<Tool> playerTools = new List<Tool>(); // list of tools the player has
     public Dictionary<string, int> materialInventory = new Dictionary<string, int>(); // dictionary holding the materials the player has, and how much of each
-    public Dictionary<Mods, int> playerMods = new Dictionary<Mods, int>();
+    public Dictionary<string, int> playerMods = new Dictionary<string, int>();
     //public List<Mods> playerMods = new List<Mods>(); // list of the mods the player has
 
     public Tool equippedTool; // reference to equipped tool (from playerTools list)
@@ -84,10 +84,10 @@ public class PlayerInventory : MonoBehaviour
         // Output mods to the screen
         string modOutput = "";
 
-        foreach(Mods mod in playerMods.Keys)
+        foreach(string mod in playerMods.Keys)
         {
             //modOutput += mod.TypeGetter + " " + mod.subtype + " "; for list version
-            modOutput += mod.TypeGetter + ": " + playerMods[mod] + "  ";
+            modOutput += mod + playerMods[mod] + "  ";
         }
 
         GUI.Label(new Rect(0.0f, 0.0f, 1000.0f, 50.0f), matOutput);
@@ -113,8 +113,6 @@ public class PlayerInventory : MonoBehaviour
         // check if all ingredients in the input dic are in your inventory
         bool hasMat = CheckInventory(inputs);
 
-        bool hasMod = CheckInventory(output);
-
         // if the player has all of the necessary ingredients
         if (hasMat)
         {
@@ -124,22 +122,10 @@ public class PlayerInventory : MonoBehaviour
                 materialInventory[input.Key] -= input.Value;
             }
 
-            if (!hasMod)
-            {
-                Debug.Log("Adding Mod");
-                playerMods.Add(output, 1);
-            }
-            else
-            {
-                Debug.Log("Plussing Mod");
-                playerMods[output] += 1;
-            }
+            AddToInventory(output);
+
             //playerMods.Add(output); for list version
         }
-        /*else if (hasMod)
-        {
-            Debug.Log("You already have this mod");
-        }*/
         else
         {
             Debug.Log("You do not have the necessary materials");
@@ -215,7 +201,7 @@ public class PlayerInventory : MonoBehaviour
     public bool CheckInventory(Mods _mod)
     {
         // check if the mod is in your inventory
-        if (!playerMods.ContainsKey(_mod))
+        if (!playerMods.ContainsKey(_mod.modKey))
         {
             return false;
         }
@@ -272,8 +258,16 @@ public class PlayerInventory : MonoBehaviour
     public void AddToInventory(Mods _mod)
     {
         // check to see if the mod is in the dic already 
+        if (playerMods.ContainsKey(_mod.modKey))
+        {
+            playerMods[_mod.modKey] += 1;
+        }
         
         // if not, add it to the dic
+        else
+        {
+            playerMods.Add(_mod.modKey, 1);
+        }
     }
     /// <summary>
     /// Overload 2 of AddToInventory adds the given tool to the player's tool inventory, if they do not already have it
