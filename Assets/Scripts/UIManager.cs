@@ -55,6 +55,8 @@ public class UIManager : MonoBehaviour
             Image newImage = newMod.AddComponent<Image>();
             newImage.sprite = testMod;
 
+            newMod.AddComponent<DragDrop>();
+
             RectTransform modTransform = newMod.GetComponent<RectTransform>();
             modTransform.anchoredPosition = new Vector2((100 * -i) - 55, 0);
         }
