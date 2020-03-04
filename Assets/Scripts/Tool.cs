@@ -22,9 +22,9 @@ public class Tool : MonoBehaviour
     /// <summary>
     /// Use Class: Where the use of the respective tool will be defined
     /// </summary>
-    void Use()
+    public virtual void Use()
     {
-        // Perform the use of the tool
+        Debug.Log("Tool used");
     }
 
     /// <summary>
