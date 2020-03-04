@@ -9,7 +9,9 @@ public class PlayerInventory : MonoBehaviour
     // VARIABLES
     public List<Tool> playerTools = new List<Tool>(); // list of tools the player has
     public Dictionary<string, int> materialInventory = new Dictionary<string, int>(); // dictionary holding the materials the player has, and how much of each
-    public List<Mods> playerMods = new List<Mods>(); // list of the mods the player has
+    public Dictionary<Mods, int> playerMods = new Dictionary<Mods, int>();
+    //public List<Mods> playerMods = new List<Mods>(); // list of the mods the player has
+
     public Tool equippedTool; // reference to equipped tool (from playerTools list)
 
     // TEST VARIABLES: DELETE
@@ -27,15 +29,15 @@ public class PlayerInventory : MonoBehaviour
         // Test Resource Adding
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            AddToInventory("gold", 1);
+            AddToInventory("gold", 100);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            AddToInventory("iron", 20);
+            AddToInventory("iron", 200);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            AddToInventory("brass", 10);
+            AddToInventory("brass", 100);
         }
 
         if (Input.GetKeyDown(KeyCode.M))
@@ -71,6 +73,7 @@ public class PlayerInventory : MonoBehaviour
     // OnGUI used to print to the screen
     private void OnGUI()
     {
+        // Output materials the player has to screen
         string matOutput = "";
 
         foreach(string key in materialInventory.Keys)
@@ -78,11 +81,13 @@ public class PlayerInventory : MonoBehaviour
             matOutput += key + ": " + materialInventory[key] + "  ";
         }
 
+        // Output mods to the screen
         string modOutput = "";
 
-        foreach(Mods mod in playerMods)
+        foreach(Mods mod in playerMods.Keys)
         {
-            modOutput += mod.TypeGetter + " " + mod.subtype + " ";
+            //modOutput += mod.TypeGetter + " " + mod.subtype + " "; for list version
+            modOutput += mod.TypeGetter + ": " + playerMods[mod] + "  ";
         }
 
         GUI.Label(new Rect(0.0f, 0.0f, 1000.0f, 50.0f), matOutput);
@@ -111,7 +116,7 @@ public class PlayerInventory : MonoBehaviour
         bool hasMod = CheckInventory(output);
 
         // if the player has all of the necessary ingredients
-        if (hasMat && !hasMod)
+        if (hasMat)
         {
             // remove the given amount of materials from the player inventory
             foreach(KeyValuePair<string, int> input in inputs)
@@ -119,12 +124,24 @@ public class PlayerInventory : MonoBehaviour
                 materialInventory[input.Key] -= input.Value;
             }
 
-            playerMods.Add(output);
+            string modString = output.TypeGetter + " " + output.subtype;
+
+            if (!hasMod)
+            {
+                Debug.Log("Adding Mod");
+                playerMods.Add(modString, 1);
+            }
+            else
+            {
+                Debug.Log("Plussing Mod");
+                playerMods[modString] += 1;
+            }
+            //playerMods.Add(output); for list version
         }
-        else if (hasMod)
+        /*else if (hasMod)
         {
             Debug.Log("You already have this mod");
-        }
+        }*/
         else
         {
             Debug.Log("You do not have the necessary materials");
@@ -200,7 +217,7 @@ public class PlayerInventory : MonoBehaviour
     public bool CheckInventory(Mods _mod)
     {
         // check if the mod is in your inventory
-        if (!playerMods.Contains(_mod))
+        if (!playerMods.ContainsKey(_mod.TypeGetter + " " + _mod.subtype))
         {
             return false;
         }
@@ -248,7 +265,7 @@ public class PlayerInventory : MonoBehaviour
             materialInventory.Add(_type, _amount);
         }
 
-        Debug.Log(_type + " in inventory: " + materialInventory[_type]);
+        //Debug.Log(_type + " in inventory: " + materialInventory[_type]);
     }
     /// <summary>
     /// Overload 1 of AddToInventory adds the given mod to the player's mod inventory, if they do not already have it
@@ -256,9 +273,9 @@ public class PlayerInventory : MonoBehaviour
     /// <param name="_mod">The mod added to the inventory</param>
     public void AddToInventory(Mods _mod)
     {
-        // check to see if the mod is in the list already (?)
-
-        // if not, add it to the list
+        // check to see if the mod is in the dic already 
+        
+        // if not, add it to the dic
     }
     /// <summary>
     /// Overload 2 of AddToInventory adds the given tool to the player's tool inventory, if they do not already have it
@@ -275,4 +292,19 @@ public class PlayerInventory : MonoBehaviour
     // ---pick up method
     // read the thing's type and amount (if relevant)
     // call the appropriate AddTo... method based on above results
+    void PickUp()
+    {
+
+    }
+
+    /*/// <summary>
+    /// Generate a string key for a mod to add to the inventory put
+    /// </summary>
+    /// <param name="_mod"></param>
+    /// <returns></returns>
+    string GenModKey(Mods _mod)
+    {
+        string modKey = _mod.TypeGetter + " " + _mod.subtype;
+        return modKey;
+    }*/
 }

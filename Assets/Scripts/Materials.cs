@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Materials : MonoBehaviour
+public class Materials // : MonoBehaviour
 {
     // Variables
     //public enum type { gold, steel, bronze, brass, copper, iron}
