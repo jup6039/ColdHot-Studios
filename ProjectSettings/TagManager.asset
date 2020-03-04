@@ -8,6 +8,7 @@ TagManager:
   - ModdingMenu
   - CraftingMenu
   - Workbench
+  - mouseOver
   layers:
   - Default
   - TransparentFX
