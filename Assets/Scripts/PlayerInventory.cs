@@ -124,17 +124,15 @@ public class PlayerInventory : MonoBehaviour
                 materialInventory[input.Key] -= input.Value;
             }
 
-            string modString = output.TypeGetter + " " + output.subtype;
-
             if (!hasMod)
             {
                 Debug.Log("Adding Mod");
-                playerMods.Add(modString, 1);
+                playerMods.Add(output, 1);
             }
             else
             {
                 Debug.Log("Plussing Mod");
-                playerMods[modString] += 1;
+                playerMods[output] += 1;
             }
             //playerMods.Add(output); for list version
         }
@@ -217,7 +215,7 @@ public class PlayerInventory : MonoBehaviour
     public bool CheckInventory(Mods _mod)
     {
         // check if the mod is in your inventory
-        if (!playerMods.ContainsKey(_mod.TypeGetter + " " + _mod.subtype))
+        if (!playerMods.ContainsKey(_mod))
         {
             return false;
         }
