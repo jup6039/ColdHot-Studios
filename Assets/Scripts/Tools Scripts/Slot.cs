@@ -11,6 +11,10 @@ public class Slot : MonoBehaviour
     private inputType type;
     private slotType subtype;
 
+    // Getters/Setter
+    public inputType Type { get { return type; } }
+    public slotType Subtype { get { return subtype; } }
+
     // Start is called before the first frame update
     void Start()
     {

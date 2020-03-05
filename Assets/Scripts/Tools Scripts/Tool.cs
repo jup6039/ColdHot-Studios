@@ -6,7 +6,7 @@ public class Tool : MonoBehaviour
 {
     // Variables
     protected Dictionary<Slot, bool> slotList = new Dictionary<Slot, bool>();
-    protected List<Slot> filledSlots = new List<Slot>();
+    protected List<Mods> filledSlots = new List<Mods>();
     private bool usedThisUpdate;
     public bool UsedThisUpdate { get { return usedThisUpdate; } set { usedThisUpdate = value; } }
     // Start is called before the first frame update
@@ -32,11 +32,36 @@ public class Tool : MonoBehaviour
     /// <summary>
     /// AddSlot Class: Used to populate the slotList of the tool
     /// </summary>
-    void AddSlot(Slot.inputType _inputType, Slot.slotType _subtype)
+    protected void AddSlot(Slot.inputType _inputType, Slot.slotType _subtype)
     {
         // Add a slot to the tool
         Slot newSlot = new Slot(_inputType, _subtype); // create a new slot object
 
-        slotList.Add(newSlot, false);
+        slotList.Add(newSlot, false); // add to slot list (false means empty)
+    }
+
+    /// <summary>
+    /// FillSlot Class: Checks if the mod fits in a slot, and puts it there [MAYBE MOVE TO UI CODE???]
+    /// </summary>
+    /// <param name="_fillSlot">The mod to fill the open slot</param>
+    /// <returns></returns>
+    protected string FillSlot(Mods _fillSlot) // CHANGE to public?
+    {
+        foreach (Slot slot in slotList.Keys)
+        {
+            if (slot.Subtype == _fillSlot.subtype)
+            {
+                if (slotList[slot])
+                {
+                    return "filled"; // if the slot is already filled, return "filled"
+                }
+
+                slotList[slot] = true;
+
+                filledSlots.Add(_fillSlot);
+            }
+        }
+
+        return "noslot"; // if there is no such slot, return "noslot"
     }
 }

@@ -24,6 +24,9 @@ public class ProjectileTool : Tool
         sprayActive = false;
         sprayController = null;
         UsedThisUpdate = false;
+
+        // populate slot list
+        AddSlot(Slot.inputType.mod, Slot.slotType.nozzle);
     }
 
     // Update is called once per frame
