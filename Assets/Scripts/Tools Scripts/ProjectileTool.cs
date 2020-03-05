@@ -8,31 +8,34 @@ public class ProjectileTool : Tool
     [SerializeField] private GameObject projectile;
     [SerializeField] private projectileState nozzleType;
 
+    // ---------------------------------------- Spray Variables
+    [SerializeField] private float growthPerFrame; //how far the spray extends per frame of usage
+    [SerializeField] private float maxSize; //how far the spray can extend
+    [SerializeField] private float minSize; //the least distance the spray can extend on startup
+
     private bool sprayActive;
     private GameObject spray;
-    private bool usedThisUpdate;
+    private SprayCollision sprayController;
 
     // Start is called before the first frame update
     void Start()
     {
         nozzleType = projectileState.spray;
         sprayActive = false;
+        sprayController = null;
+        UsedThisUpdate = false;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        usedThisUpdate = false;
-        if(Input.GetKey(KeyCode.Q))
-        {
-            Use();
-        }
 
-        if(!usedThisUpdate)
+        if(!UsedThisUpdate)
         {
             if(sprayActive)
             {
                 sprayActive = false;
+                sprayController = null;
                 Destroy(spray);
             }
 
@@ -41,14 +44,16 @@ public class ProjectileTool : Tool
 
     public override void Use()
     {
-        usedThisUpdate = true;
         switch(nozzleType)
         {
             case projectileState.spray:
                 if(!sprayActive)
                 {
                     spray = CreateProjectile();
+                    sprayController = spray.GetComponentInChildren<SprayCollision>();
                     sprayActive = true;
+                    sprayController.increaseSize(minSize);
+
                 }
                 else
                 {
@@ -62,6 +67,23 @@ public class ProjectileTool : Tool
 
                     spray.transform.position = newposition;
                     spray.transform.rotation = camTransform.rotation;
+
+                    //grow the spray based on values
+                    sprayController.increaseSize(growthPerFrame, maxSize);
+
+                    //get the list of hit gameobjects
+                    List<GameObject> hitObjects = sprayController.GetShotObjects();
+
+                    //for each object shot this frame run its shot if can be shot, for now just debug the object
+                    if (hitObjects != null)
+                    {
+                        for (int i = 0; i < hitObjects.Count; i++)
+                        {
+                            Debug.Log(hitObjects[i]);
+                        }
+                    }
+                    //remove all objects from list after calling them
+                    sprayController.ClearShotObjects();
                 }
                 break;
 

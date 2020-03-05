@@ -122,7 +122,7 @@ public class PlayerInventory : MonoBehaviour
                 materialInventory[input.Key] -= input.Value;
             }
 
-            AddToInventory(output);
+            AddToInventory(output.modKey);
 
             //playerMods.Add(output); for list version
         }
@@ -255,18 +255,18 @@ public class PlayerInventory : MonoBehaviour
     /// Overload 1 of AddToInventory adds the given mod to the player's mod inventory, if they do not already have it
     /// </summary>
     /// <param name="_mod">The mod added to the inventory</param>
-    public void AddToInventory(Mods _mod)
+    public void AddToInventory(string _modKey)
     {
         // check to see if the mod is in the dic already 
-        if (playerMods.ContainsKey(_mod.modKey))
+        if (playerMods.ContainsKey(_modKey))
         {
-            playerMods[_mod.modKey] += 1;
+            playerMods[_modKey] += 1;
         }
         
         // if not, add it to the dic
         else
         {
-            playerMods.Add(_mod.modKey, 1);
+            playerMods.Add(_modKey, 1);
         }
     }
     /// <summary>
@@ -278,15 +278,6 @@ public class PlayerInventory : MonoBehaviour
         // check to see if the tool is in the list already (?)
 
         // if not, add it to the list
-    }
-
-
-    // ---pick up method
-    // read the thing's type and amount (if relevant)
-    // call the appropriate AddTo... method based on above results
-    void PickUp()
-    {
-
     }
 
     /*/// <summary>

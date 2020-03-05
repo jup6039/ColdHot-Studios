@@ -29,6 +29,7 @@ public class CharacterInput : MonoBehaviour
             {
                 InteractableObject thisInteraction = thisObject.GetComponent<InteractableObject>();
                 thisInteraction.ToggleInteraction();
+                thisInteraction.GetReference(this); // when the player interacts with an object, store a reference to player in interaction class
             }
         }
 
