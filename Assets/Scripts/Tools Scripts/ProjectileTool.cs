@@ -8,9 +8,6 @@ public class ProjectileTool : Tool
     [SerializeField] private GameObject projectile;
     [SerializeField] private projectileState nozzleType;
 
-    
-    private bool usedThisUpdate;
-
     // ---------------------------------------- Spray Variables
     [SerializeField] private float growthPerFrame; //how far the spray extends per frame of usage
     [SerializeField] private float maxSize; //how far the spray can extend
@@ -26,19 +23,14 @@ public class ProjectileTool : Tool
         nozzleType = projectileState.spray;
         sprayActive = false;
         sprayController = null;
+        UsedThisUpdate = false;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        usedThisUpdate = false;
 
-        if(Input.GetKey(KeyCode.Q))
-        {
-            Use();
-        }
-
-        else
+        if(!UsedThisUpdate)
         {
             if(sprayActive)
             {

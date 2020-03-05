@@ -6,7 +6,8 @@ public class Tool : MonoBehaviour
 {
     // Variables
     protected List<Slot> slotList = new List<Slot>();
-
+    private bool usedThisUpdate;
+    public bool UsedThisUpdate { get { return usedThisUpdate; } set { usedThisUpdate = value; } }
     // Start is called before the first frame update
     void Start()
     {
