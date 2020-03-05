@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
+    // stores a reference to the character that interacted with the object
+    private CharacterInput characterReference;
 
     //boolean value stores whether the gameobject is in the interactable state, other scripts on the gameobject will read this value to determine how they act in the update state
     private bool interaction;
@@ -19,6 +21,7 @@ public class InteractableObject : MonoBehaviour
 
     public bool Interaction { get { return interaction; } }
     public bool InteractionVoided { get { return interactionVoided; } }
+    public CharacterInput CharacterReference { get { return characterReference; } }
 
     // Start is called before the first frame update
     void Start()
@@ -67,6 +70,12 @@ public class InteractableObject : MonoBehaviour
     public void VoidInteractions()
     {
         interactionVoided = true;
+    }
+
+    // sets the character reference to an object
+    public void GetReference(CharacterInput reference)
+    {
+        characterReference = reference;
     }
 
     private void OnMouseEnter()
