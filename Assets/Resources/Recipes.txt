@@ -1,5 +1,11 @@
 1
 mod
-gold|2,iron|4
+iron|5
 0
 nozzle
+
+2
+mod
+steel|3,brass|1
+1
+loader

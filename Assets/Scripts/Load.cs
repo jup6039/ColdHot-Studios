@@ -18,6 +18,10 @@ public class Load : MonoBehaviour
         pInventoryScript = player.GetComponent<PlayerInventory>();
 
         LoadRecipeList(); // load recipes text file
+
+        Debug.Log(pInventoryScript.recipeList[0]);
+        Debug.Log(pInventoryScript.recipeList[0].outputString);
+        Debug.Log(pInventoryScript.recipeList[1].type);
     }
 
     // Update is called once per frame
@@ -96,6 +100,8 @@ public class Load : MonoBehaviour
                     Recipe newRecipe = new Recipe(inputs, type, recipeIndex, output);
                     pInventoryScript.recipeList.Add(newRecipe);
 
+                    thisRow = sr.ReadLine(); // skip the gap line
+
                     lineNumber = 0;
                 }
             }
@@ -103,6 +109,10 @@ public class Load : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log("Error reading recipes: " + e.Message);
+        }
+        finally
+        {
+            inStream.Close();
         }
     }
 }
