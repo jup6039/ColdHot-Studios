@@ -7,6 +7,7 @@ public class PlayerInventory : MonoBehaviour
     //public enum inventoryType { material, mod, tool} // passed in to methods to perform various actions. DELETE if decide to make separate functions
 
     // VARIABLES
+    public List<Recipe> recipeList = new List<Recipe>();
     public List<Tool> playerTools = new List<Tool>(); // list of tools the player has
     public Dictionary<string, int> materialInventory = new Dictionary<string, int>(); // dictionary holding the materials the player has, and how much of each
     public Dictionary<string, int> playerMods = new Dictionary<string, int>();
