@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     public GameObject player;
     public GameObject textPrompt;
     public GameObject modPanel;
+    public GameObject modPanelPrefab;
+    public Sprite borderImage;
 
     private GameObject moddingMenu;
     private GameObject craftingMenu;
@@ -48,17 +50,42 @@ public class UIManager : MonoBehaviour
         Cursor.visible = false;
 
         // create panel list of all available mods
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 20; i++)
         {
+            // create panel for mod
+            GameObject newPanel = new GameObject();
+            newPanel.transform.SetParent(modPanel.transform);
+            Image panelImage = newPanel.AddComponent<Image>();
+            panelImage.sprite = borderImage;
+
+            RectTransform panelTransform = newPanel.GetComponent<RectTransform>();
+            panelTransform.anchoredPosition = new Vector2((100 * i) - 400, 0);
+
+            //newPanel.transform.localScale += new Vector3(2f, 2f, 2f);
+
+            // create mod
             GameObject newMod = new GameObject();
-            newMod.transform.SetParent(modPanel.transform);
+            newMod.transform.SetParent(newPanel.transform);
             Image newImage = newMod.AddComponent<Image>();
             newImage.sprite = testMod;
 
             newMod.AddComponent<DragDrop>();
 
             RectTransform modTransform = newMod.GetComponent<RectTransform>();
-            modTransform.anchoredPosition = new Vector2((100 * -i) - 55, 0);
+            //modTransform.anchoredPosition = new Vector2((100 * i) - 400, 0);
+            modTransform.anchoredPosition = new Vector2(0, 0);
+
+            newMod.transform.localScale -= new Vector3(0.75f, 0.75f, 0.75f);
+
+            // create another panel and set up buttons if there are more than a certain number of mods
+            /*if (i % 5 == 0)
+            {
+                GameObject newModPanel = Instantiate(modPanelPrefab);
+                newModPanel.transform.SetParent(moddingMenu.transform);
+                newModPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+
+                modPanel = newModPanel;
+            }*/
         }
     }
 
