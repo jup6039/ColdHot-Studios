@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     public GameObject player;
     public GameObject textPrompt;
     public GameObject modPanel;
-    public GameObject modPanelPrefab;
+    //public GameObject modPanelPrefab;
     public Sprite borderImage;
 
     private GameObject moddingMenu;
@@ -55,6 +55,7 @@ public class UIManager : MonoBehaviour
             // create panel for mod
             GameObject newPanel = new GameObject();
             newPanel.transform.SetParent(modPanel.transform);
+            newPanel.AddComponent<DropArea>();
             Image panelImage = newPanel.AddComponent<Image>();
             panelImage.sprite = borderImage;
 
@@ -68,24 +69,13 @@ public class UIManager : MonoBehaviour
             newMod.transform.SetParent(newPanel.transform);
             Image newImage = newMod.AddComponent<Image>();
             newImage.sprite = testMod;
-
-            newMod.AddComponent<DragDrop>();
+            newMod.AddComponent<Draggable>();
 
             RectTransform modTransform = newMod.GetComponent<RectTransform>();
             //modTransform.anchoredPosition = new Vector2((100 * i) - 400, 0);
             modTransform.anchoredPosition = new Vector2(0, 0);
 
             newMod.transform.localScale -= new Vector3(0.75f, 0.75f, 0.75f);
-
-            // create another panel and set up buttons if there are more than a certain number of mods
-            /*if (i % 5 == 0)
-            {
-                GameObject newModPanel = Instantiate(modPanelPrefab);
-                newModPanel.transform.SetParent(moddingMenu.transform);
-                newModPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-
-                modPanel = newModPanel;
-            }*/
         }
     }
 
