@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     public GameObject player;
     public GameObject textPrompt;
     public GameObject modPanel;
-    //public GameObject modPanelPrefab;
+    public GameObject modPrefab;
     public Sprite borderImage;
 
     private GameObject moddingMenu;
@@ -50,19 +50,23 @@ public class UIManager : MonoBehaviour
         Cursor.visible = false;
 
         // create panel list of all available mods
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 5; i++)
         {
+            GameObject newMod = Instantiate(modPrefab);
+            newMod.transform.SetParent(modPanel.transform);
+
+            RectTransform modTransform = newMod.GetComponent<RectTransform>();
+            modTransform.anchoredPosition = new Vector2((100 * i) - 400, 0);
+
             // create panel for mod
-            GameObject newPanel = new GameObject();
+            /*GameObject newPanel = new GameObject();
             newPanel.transform.SetParent(modPanel.transform);
-            newPanel.AddComponent<DropArea>();
+            
             Image panelImage = newPanel.AddComponent<Image>();
             panelImage.sprite = borderImage;
 
             RectTransform panelTransform = newPanel.GetComponent<RectTransform>();
             panelTransform.anchoredPosition = new Vector2((100 * i) - 400, 0);
-
-            //newPanel.transform.localScale += new Vector3(2f, 2f, 2f);
 
             // create mod
             GameObject newMod = new GameObject();
@@ -72,10 +76,9 @@ public class UIManager : MonoBehaviour
             newMod.AddComponent<Draggable>();
 
             RectTransform modTransform = newMod.GetComponent<RectTransform>();
-            //modTransform.anchoredPosition = new Vector2((100 * i) - 400, 0);
             modTransform.anchoredPosition = new Vector2(0, 0);
 
-            newMod.transform.localScale -= new Vector3(0.75f, 0.75f, 0.75f);
+            newMod.transform.localScale -= new Vector3(0.75f, 0.75f, 0.75f);*/
         }
     }
 

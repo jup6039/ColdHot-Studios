@@ -997,7 +997,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1533,6 +1533,8 @@ MonoBehaviour:
   player: {fileID: 572323277}
   textPrompt: {fileID: 365419906}
   modPanel: {fileID: 1486316057}
+  modPrefab: {fileID: 5828343625464619569, guid: c1e77d0a7060bcc48989053ea78d1b4a,
+    type: 3}
   borderImage: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   testMod: {fileID: 21300000, guid: 5b1a64ea234fb2343b8d0686c51280de, type: 3}
 --- !u!4 &1343588802
@@ -1606,9 +1608,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1486316057}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1727c5dfc1b64904daf11f8543681555, type: 3}
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HorizontalFit: 1
+  m_VerticalFit: 0
 --- !u!1 &1544131851
 GameObject:
   m_ObjectHideFlags: 0
@@ -2005,7 +2009,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1674436518
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2070,7 +2074,7 @@ MonoBehaviour:
   m_Direction: 0
   m_Value: 0
   m_Size: 1
-  m_NumberOfSteps: 5
+  m_NumberOfSteps: 10
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2362,12 +2366,12 @@ RectTransform:
   m_Children:
   - {fileID: 851514950}
   m_Father: {fileID: 2063764171}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -17}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1988658834
 MonoBehaviour:
@@ -2602,8 +2606,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1486316058}
   - {fileID: 1988658833}
+  - {fileID: 1486316058}
   - {fileID: 1674436518}
   m_Father: {fileID: 2007065349}
   m_RootOrder: 3
@@ -2628,13 +2632,13 @@ MonoBehaviour:
   m_Content: {fileID: 1486316058}
   m_Horizontal: 1
   m_Vertical: 0
-  m_MovementType: 2
+  m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 1
   m_Viewport: {fileID: 1988658833}
-  m_HorizontalScrollbar: {fileID: 1674436519}
+  m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
   m_HorizontalScrollbarVisibility: 0
   m_VerticalScrollbarVisibility: 2
@@ -2883,7 +2887,7 @@ PrefabInstance:
     - target: {fileID: 8689521299721417585, guid: 5d984824097d61c4c8b6d043a2f91898,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8689521299721417585, guid: 5d984824097d61c4c8b6d043a2f91898,
         type: 3}
@@ -2928,7 +2932,7 @@ PrefabInstance:
     - target: {fileID: 8689521299721417585, guid: 5d984824097d61c4c8b6d043a2f91898,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.038000003
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8689521299721417585, guid: 5d984824097d61c4c8b6d043a2f91898,
         type: 3}

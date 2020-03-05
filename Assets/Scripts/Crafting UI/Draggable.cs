@@ -1,66 +1,69 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Collections;
 
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    public Transform parentToReturnTo = null;
-    public Transform placeHolderParent = null;
+    private Vector2 lastMousePosition;
+    private Vector2 originalPosition;
 
-    private GameObject placeHolder = null;
+    void Start()
+    {
+        originalPosition = this.GetComponent<RectTransform>().position;
+    }
 
+    // begin drag
+    // save original position
     public void OnBeginDrag(PointerEventData eventData)
     {
-        placeHolder = new GameObject();
-        placeHolder.transform.SetParent(this.transform.parent);
-        LayoutElement le = placeHolder.AddComponent<LayoutElement>();
-        le.preferredWidth = this.GetComponent<LayoutElement>().preferredWidth;
-        le.preferredHeight = this.GetComponent<LayoutElement>().preferredHeight;
-        le.flexibleWidth = 0;
-        le.flexibleHeight = 0;
-
-        placeHolder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
-
-        parentToReturnTo = this.transform.parent;
-        placeHolderParent = parentToReturnTo;
-        this.transform.SetParent(this.transform.parent.parent);
-
-        this.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        Debug.Log("Begin Drag");
+        lastMousePosition = eventData.position;
     }
 
+    // drag object
     public void OnDrag(PointerEventData eventData)
     {
-        this.transform.position = eventData.position;
+        Vector2 currentMousePosition = eventData.position;
+        Vector2 diff = currentMousePosition - lastMousePosition;
+        RectTransform rect = GetComponent<RectTransform>();
 
-        if (placeHolder.transform.parent != placeHolderParent)
+        Vector3 newPosition = rect.position + new Vector3(diff.x, diff.y, transform.position.z);
+        Vector3 oldPos = rect.position;
+        rect.position = newPosition;
+        if (!IsRectTransformInsideSreen(rect))
         {
-            placeHolder.transform.SetParent(placeHolderParent);
+            rect.position = oldPos;
         }
-
-        int newSiblingIndex = placeHolderParent.childCount;
-
-        for (int i = 0; i < placeHolderParent.childCount; i++)
-        {
-            if (this.transform.position.x < placeHolderParent.GetChild(i).position.x)
-            {
-                newSiblingIndex = i;
-
-                if (placeHolder.transform.GetSiblingIndex() < newSiblingIndex)
-                    newSiblingIndex--;
-
-                break;
-            }
-        }
-
-        placeHolder.transform.SetSiblingIndex(newSiblingIndex);
+        lastMousePosition = currentMousePosition;
     }
 
+    // end of mouse drag
+    // return to original position
     public void OnEndDrag(PointerEventData eventData)
     {
-        this.transform.SetParent(parentToReturnTo);
-        this.transform.SetSiblingIndex(placeHolder.transform.GetSiblingIndex());
-        this.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        Destroy(placeHolder);
+        Debug.Log("End Drag");
+        //Implement your funtionlity here
+        this.GetComponent<RectTransform>().position = originalPosition;
+    }
+
+    // make sure dragging object remains inside panel
+    private bool IsRectTransformInsideSreen(RectTransform rectTransform)
+    {
+        bool isInside = false;
+        Vector3[] corners = new Vector3[4];
+        rectTransform.GetWorldCorners(corners);
+        int visibleCorners = 0;
+        Rect rect = new Rect(0, 0, Screen.width, Screen.height);
+        foreach (Vector3 corner in corners)
+        {
+            if (rect.Contains(corner))
+            {
+                visibleCorners++;
+            }
+        }
+        if (visibleCorners == 4)
+        {
+            isInside = true;
+        }
+        return isInside;
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - CraftingMenu
   - Workbench
   - mouseOver
+  - dragpanel
   layers:
   - Default
   - TransparentFX
