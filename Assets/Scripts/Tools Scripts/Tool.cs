@@ -45,7 +45,7 @@ public class Tool : MonoBehaviour
     /// </summary>
     /// <param name="_fillSlot">The mod to fill the open slot</param>
     /// <returns></returns>
-    protected string FillSlot(Mods _fillSlot) // CHANGE to public?
+    public string FillSlot(Mods _fillSlot) // CHANGE to protected?
     {
         foreach (Slot slot in slotList.Keys)
         {
@@ -59,9 +59,22 @@ public class Tool : MonoBehaviour
                 slotList[slot] = true;
 
                 filledSlots.Add(_fillSlot);
+
+                onSlotFilled(_fillSlot);
+
+                return "successful slotting";
             }
         }
 
         return "noslot"; // if there is no such slot, return "noslot"
+    }
+
+    /// <summary>
+    /// Makes changes to the tool that are triggered by filling a mod
+    /// </summary>
+    /// <param name="_filledMod">the mod that filled</param>
+    public virtual void onSlotFilled(Mods _filledMod)
+    {
+        
     }
 }

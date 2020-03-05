@@ -193,11 +193,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de2094aa61b44149b8f3db58da76ba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 0}
+  projectile: {fileID: 3758972953229765868, guid: ed114744cc67ea94a84a0bc791b2f4dc,
+    type: 3}
   nozzleType: 0
-  growthPerFrame: 0
-  maxSize: 0
-  minSize: 0
+  growthPerFrame: 0.5
+  maxSize: 3
+  minSize: 0.1
 --- !u!4 &641251667
 Transform:
   m_ObjectHideFlags: 0
@@ -531,6 +532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451d5920a57c0fc4fac268959ddd020a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomList: 
   playerTools: []
   equippedTool: {fileID: 0}
 --- !u!114 &2119814245

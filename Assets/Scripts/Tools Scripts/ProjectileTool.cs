@@ -32,7 +32,6 @@ public class ProjectileTool : Tool
     // Update is called once per frame
     void FixedUpdate()
     {
-
         if(!UsedThisUpdate)
         {
             if(sprayActive)
@@ -42,6 +41,18 @@ public class ProjectileTool : Tool
                 Destroy(spray);
             }
 
+        }
+    }
+
+    public override void onSlotFilled(Mods _filledMod)
+    {
+        base.onSlotFilled(_filledMod);
+
+        switch (_filledMod.subtype)
+        {
+            case Slot.slotType.nozzle:
+                maxSize = maxSize * 2.0f;
+                break;
         }
     }
 

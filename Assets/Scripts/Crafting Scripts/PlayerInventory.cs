@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System; // for Enum
+using System.Linq; // for First and Last of dictionary
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +16,7 @@ public class PlayerInventory : MonoBehaviour
     public Dictionary<string, int> playerMods = new Dictionary<string, int>();
     //public List<Mods> playerMods = new List<Mods>(); // list of the mods the player has
 
-    public Tool equippedTool; // reference to equipped tool (from playerTools list)
+    [SerializeField] private Tool equippedTool; // reference to equipped tool (from playerTools list)
 
     // TEST VARIABLES: DELETE
     int testCraft;
@@ -67,6 +69,26 @@ public class PlayerInventory : MonoBehaviour
                 Craft(inputs, newMod);
             }
             testCraft++;
+        }
+
+        // on press of key
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (playerMods.Count == 0 || playerMods.First().Value == 0) // make sure the player has mods/the "first" mod has more than 1
+            {
+                Debug.Log("no valid mod");
+            }
+            else
+            {
+                KeyValuePair<string, int> modComponents = playerMods.First(); // get first mod of playerMods inventory
+                string modkey = modComponents.Key;
+
+                playerMods[modkey] -= 1; // remove a mod from the player's inventory
+
+                Mods newMod = TranslateModKey(modkey); // create a new mod
+
+                Debug.Log(equippedTool.FillSlot(newMod)); // fill the slot in the gun with the mod
+            }
         }
 
         // Call for pickup
@@ -211,7 +233,22 @@ public class PlayerInventory : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Overload 2 of CheckInventory checks the player's tool inventory to make sure they have the given tool
+    /// Overload 2 of CheckInventory checks the player's mod inventory to make sure they have the given mod
+    /// </summary>
+    /// <param name="_mod">The string modkey of the mod needed</param>
+    /// <returns>True if the given mod is in the playerMods list</returns>
+    public bool CheckInventory(string _mod)
+    {
+        // check if the mod is in your inventory
+        if (!playerMods.ContainsKey(_mod))
+        {
+            return false;
+        }
+
+        return true;
+    }
+    /// <summary>
+    /// Overload 3 of CheckInventory checks the player's tool inventory to make sure they have the given tool
     /// </summary>
     /// <param name="_tool">The tool needed</param>
     /// <returns>True if the given tool is in the playerTools list</returns>
@@ -280,6 +317,27 @@ public class PlayerInventory : MonoBehaviour
         // check to see if the tool is in the list already (?)
 
         // if not, add it to the list
+    }
+
+    /// <summary>
+    /// Generates a mod using a modkey
+    /// </summary>
+    /// <param name="modkey">the mod key used to generate the mod</param>
+    /// <returns></returns>
+    public Mods TranslateModKey(string modkey)
+    {
+        Mods newMod;
+
+        string[] modComponents = modkey.Split(',');
+
+        string newType = modComponents[0];
+
+        Slot.slotType newSubtype;
+        newSubtype = (Slot.slotType)Enum.Parse(typeof(Slot.slotType), modComponents[1]);
+
+        newMod = new Mods(newSubtype, newType, new List<string>());
+
+        return newMod;
     }
 
     /*/// <summary>
