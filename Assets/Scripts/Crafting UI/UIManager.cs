@@ -7,10 +7,14 @@ public class UIManager : MonoBehaviour
 {
     public Button modButton;
     public Button craftButton;
+    public Button goldButton;
+    public Button ironButton;
     public GameObject player;
     public GameObject textPrompt;
     public GameObject modPanel;
     public GameObject modPrefab;
+    public GameObject goldPanel;
+    public GameObject ironPanel;
     public Sprite borderImage;
 
     private GameObject moddingMenu;
@@ -46,6 +50,8 @@ public class UIManager : MonoBehaviour
         craftButton.gameObject.SetActive(false);
         modPanel.SetActive(false);
         testPanel.SetActive(false);
+        goldPanel.SetActive(false);
+        ironPanel.SetActive(false);
 
         // bool variables
         isPaused = false;
@@ -97,9 +103,23 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        foreach (GameObject bench in workbenches)
+        {
+            if (bench.GetComponent<BoxCollider>().bounds.Contains(player.transform.position))
+            {
+                textPrompt.SetActive(true);
+                canCraft = true;
+            }
+            else
+            {
+                textPrompt.SetActive(false);
+                canCraft = false;
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.P))
         {
-            if (Time.timeScale == 1 && isPaused == false && canCraft == true)
+            if (Time.timeScale == 1 && isPaused == false /*&& canCraft == true*/)
             {
                 // unlock cursor
                 Cursor.lockState = CursorLockMode.None;
@@ -119,6 +139,8 @@ public class UIManager : MonoBehaviour
                 textPrompt.SetActive(false);
                 modButton.onClick.AddListener(SwitchToMod);
                 craftButton.onClick.AddListener(SwitchToCraft);
+                goldButton.onClick.AddListener(GoldReveal);
+                ironButton.onClick.AddListener(IronReveal);
                 modPanel.SetActive(true);
             }
             else if (Time.timeScale == 0 && isPaused == true)
@@ -132,20 +154,7 @@ public class UIManager : MonoBehaviour
                 craftingMenu.SetActive(false);
                 modButton.gameObject.SetActive(false);
                 craftButton.gameObject.SetActive(false);
-            }
-        }
-
-        foreach (GameObject bench in workbenches)
-        {
-            if (bench.GetComponent<BoxCollider>().bounds.Contains(player.transform.position))
-            {
-                textPrompt.SetActive(true);
-                canCraft = true;
-            }
-            else
-            {
-                textPrompt.SetActive(false);
-                canCraft = false;
+                testPanel.SetActive(false);
             }
         }
     }
@@ -166,6 +175,18 @@ public class UIManager : MonoBehaviour
         modPanel.SetActive(false);
         testPanel.SetActive(false);
         craftingMenu.SetActive(true);
+    }
+
+    void GoldReveal()
+    {
+        goldPanel.SetActive(true);
+        ironPanel.SetActive(false);
+    }
+
+    void IronReveal()
+    {
+        goldPanel.SetActive(false);
+        ironPanel.SetActive(true);
     }
 
     // whenever a new mod is created, another mod icon is added to the list
