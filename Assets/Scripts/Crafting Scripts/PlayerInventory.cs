@@ -16,6 +16,8 @@ public class PlayerInventory : MonoBehaviour
     public Dictionary<string, int> playerMods = new Dictionary<string, int>();
     //public List<Mods> playerMods = new List<Mods>(); // list of the mods the player has
 
+    public GameObject sceneManager;
+
     [SerializeField] private Tool equippedTool; // reference to equipped tool (from playerTools list)
 
     // TEST VARIABLES: DELETE
@@ -69,6 +71,7 @@ public class PlayerInventory : MonoBehaviour
                 Craft(inputs, newMod);
             }
             testCraft++;
+            sceneManager.GetComponent<UIManager>().AddToModList();
         }
 
         // on press of key P
@@ -306,6 +309,7 @@ public class PlayerInventory : MonoBehaviour
         else
         {
             playerMods.Add(_modKey, 1);
+            //sceneManager.GetComponent<UIManager>().AddToModList();
         }
     }
     /// <summary>

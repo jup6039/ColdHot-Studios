@@ -1,19 +1,29 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class DropArea : MonoBehaviour, IDropHandler
+public class DropArea : MonoBehaviour
 {
+    public GameObject sceneManager;
 
-    public virtual void OnDrop(PointerEventData eventData)
+    private List<GameObject> draggables;
+
+    void Start()
     {
-        // check if there is already an item at the slot
-        if (transform.childCount == 0)
-        {
-            // set new item position
-            eventData.pointerDrag.transform.SetParent(this.transform);
-            eventData.pointerDrag.transform.localPosition = Vector3.zero;
+        draggables = sceneManager.GetComponent<UIManager>().draggables;
+    }
 
-            Debug.Log(eventData.pointerDrag.name + " dropped at " + this.gameObject.name);
+    void Update()
+    {
+        foreach (GameObject item in draggables)
+        {
+            if (this.GetComponent<BoxCollider2D>().bounds.Contains(item.transform.position))
+            {
+                item.GetComponent<Draggable>().isinDropArea = true;
+                item.GetComponent<RectTransform>().position = this.transform.position;
+                item.transform.SetParent(this.transform);
+            }
         }
     }
 }

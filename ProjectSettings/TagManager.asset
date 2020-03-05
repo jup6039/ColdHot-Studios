@@ -10,6 +10,7 @@ TagManager:
   - Workbench
   - mouseOver
   - dragpanel
+  - draggable
   layers:
   - Default
   - TransparentFX

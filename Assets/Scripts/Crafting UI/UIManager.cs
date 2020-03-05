@@ -16,16 +16,21 @@ public class UIManager : MonoBehaviour
     private GameObject moddingMenu;
     private GameObject craftingMenu;
     private GameObject[] workbenches;
+    [HideInInspector] public List<GameObject> draggables;
     private bool isPaused;
     private bool canCraft;
+    private int modListPosition;
+    private Dictionary<string, int> playerMods;
 
     // for testing purposes only
     //public List<GameObject> mods;
     public Sprite testMod;
+    public GameObject testPanel;
 
     // Start is called before the first frame update
     void Start()
     {
+        modListPosition = 0;
         Time.timeScale = 1;
 
         // find menu panels
@@ -40,6 +45,7 @@ public class UIManager : MonoBehaviour
         modButton.gameObject.SetActive(false);
         craftButton.gameObject.SetActive(false);
         modPanel.SetActive(false);
+        testPanel.SetActive(false);
 
         // bool variables
         isPaused = false;
@@ -49,14 +55,20 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        playerMods = player.GetComponent<PlayerInventory>().playerMods;
+
         // create panel list of all available mods
-        for (int i = 0; i < 5; i++)
+        foreach (KeyValuePair<string, int> entry in playerMods)
         {
             GameObject newMod = Instantiate(modPrefab);
             newMod.transform.SetParent(modPanel.transform);
 
             RectTransform modTransform = newMod.GetComponent<RectTransform>();
-            modTransform.anchoredPosition = new Vector2((100 * i) - 400, 0);
+            modTransform.anchoredPosition = new Vector2((100 * modListPosition) - 400, 0);
+
+            draggables.Add(newMod);
+
+            modListPosition++;
 
             // create panel for mod
             /*GameObject newPanel = new GameObject();
@@ -103,6 +115,7 @@ public class UIManager : MonoBehaviour
                 moddingMenu.SetActive(true);
                 modButton.gameObject.SetActive(true);
                 craftButton.gameObject.SetActive(true);
+                testPanel.SetActive(true);
                 textPrompt.SetActive(false);
                 modButton.onClick.AddListener(SwitchToMod);
                 craftButton.onClick.AddListener(SwitchToCraft);
@@ -142,6 +155,7 @@ public class UIManager : MonoBehaviour
         Debug.Log("clicked");
         moddingMenu.SetActive(true);
         modPanel.SetActive(true);
+        testPanel.SetActive(true);
         craftingMenu.SetActive(false);
     }
 
@@ -150,6 +164,7 @@ public class UIManager : MonoBehaviour
         Debug.Log("clicked");
         moddingMenu.SetActive(false);
         modPanel.SetActive(false);
+        testPanel.SetActive(false);
         craftingMenu.SetActive(true);
     }
 
@@ -157,8 +172,17 @@ public class UIManager : MonoBehaviour
     // create new gameobject with mod image
     // look at most recent mod in list
     // set up anchored position points based on previous mod in list
-    void AddToModList()
+    public void AddToModList()
     {
-        
+        GameObject newMod = Instantiate(modPrefab);
+        newMod.transform.SetParent(modPanel.transform);
+
+        RectTransform modTransform = newMod.GetComponent<RectTransform>();
+        modTransform.anchoredPosition = new Vector2((100 * modListPosition) - 400, 0);
+
+        draggables.Add(newMod);
+
+        modListPosition++;
+        Debug.Log(modListPosition);
     }
 }

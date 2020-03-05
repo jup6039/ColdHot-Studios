@@ -5,10 +5,12 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 {
     private Vector2 lastMousePosition;
     private Vector2 originalPosition;
+    [HideInInspector] public bool isinDropArea;
 
     void Start()
     {
         originalPosition = this.GetComponent<RectTransform>().position;
+        isinDropArea = false;
     }
 
     // begin drag
@@ -17,6 +19,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     {
         Debug.Log("Begin Drag");
         lastMousePosition = eventData.position;
+        isinDropArea = false;
     }
 
     // drag object
@@ -41,8 +44,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("End Drag");
-        //Implement your funtionlity here
-        this.GetComponent<RectTransform>().position = originalPosition;
+        if (isinDropArea == false)
+        {
+            this.GetComponent<RectTransform>().position = originalPosition;
+        }
     }
 
     // make sure dragging object remains inside panel
