@@ -71,7 +71,7 @@ public class PlayerInventory : MonoBehaviour
             testCraft++;
         }
 
-        // on press of key
+        // on press of key P
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (playerMods.Count == 0 || playerMods.First().Value == 0) // make sure the player has mods/the "first" mod has more than 1

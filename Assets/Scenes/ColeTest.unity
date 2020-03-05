@@ -534,7 +534,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   randomList: 
   playerTools: []
-  equippedTool: {fileID: 0}
+  equippedTool: {fileID: 641251666}
 --- !u!114 &2119814245
 MonoBehaviour:
   m_ObjectHideFlags: 0
