@@ -1,0 +1,8 @@
+Recipe Writing Protocol
+						Example:
+-- Recipe Index | int) --				1
+-- Recipe type | string) --				mod
+-- Recipe Inputs | string) --				gold|2,iron|4
+-- Recipe Optional Inputs | int (0 for none) -- 	3	
+-- Recipe Output | string (if mod, subtype)		nozzle
+			  (if tool, tool key)

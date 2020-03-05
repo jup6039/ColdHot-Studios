@@ -1,0 +1,5 @@
+1
+mod
+gold|2,iron|4
+0
+nozzle
