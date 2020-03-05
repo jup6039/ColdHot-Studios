@@ -5,7 +5,8 @@ using UnityEngine;
 public class Tool : MonoBehaviour
 {
     // Variables
-    protected List<Slot> slotList = new List<Slot>();
+    protected Dictionary<Slot, bool> slotList = new Dictionary<Slot, bool>();
+    protected List<Slot> filledSlots = new List<Slot>();
     private bool usedThisUpdate;
     public bool UsedThisUpdate { get { return usedThisUpdate; } set { usedThisUpdate = value; } }
     // Start is called before the first frame update
@@ -36,6 +37,6 @@ public class Tool : MonoBehaviour
         // Add a slot to the tool
         Slot newSlot = new Slot(_inputType, _subtype); // create a new slot object
 
-        slotList.Add(newSlot);
+        slotList.Add(newSlot, false);
     }
 }
