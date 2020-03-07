@@ -86,7 +86,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
             {
                 StartCoroutine(m_JumpBob.DoBobCycle());
-                PlayLandingSound();
+                //PlayLandingSound();
                 m_MoveDir.y = 0f;
                 if (movementState != moveState.sliding)
                 {
@@ -204,20 +204,23 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void ProgressStepCycle(float speed)
         {
-            if (m_CharacterController.velocity.sqrMagnitude > 0 && (m_Input.x != 0 || m_Input.y != 0))
+            if (movementState != moveState.sliding || movementState != moveState.climbing)
             {
-                m_StepCycle += (m_CharacterController.velocity.magnitude + (speed*(movementState == moveState.walking ? 1f : m_RunstepLenghten)))*
-                             Time.fixedDeltaTime;
+                if (m_CharacterController.velocity.sqrMagnitude > 0 && (m_Input.x != 0 || m_Input.y != 0))
+                {
+                    m_StepCycle += (m_CharacterController.velocity.magnitude + (speed * (movementState == moveState.walking ? 1f : m_RunstepLenghten))) *
+                                 Time.fixedDeltaTime;
+                }
+
+                if (!(m_StepCycle > m_NextStep))
+                {
+                    return;
+                }
+
+                m_NextStep = m_StepCycle + m_StepInterval;
+
+                PlayFootStepAudio();
             }
-
-            if (!(m_StepCycle > m_NextStep))
-            {
-                return;
-            }
-
-            m_NextStep = m_StepCycle + m_StepInterval;
-
-            PlayFootStepAudio();
         }
 
 
@@ -231,6 +234,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
             // excluding sound at index 0
             int n = Random.Range(1, m_FootstepSounds.Length);
             m_AudioSource.clip = m_FootstepSounds[n];
+            if(movementState == moveState.crouching)
+            {
+                m_AudioSource.volume = 0.5f;
+            }
+            else
+            {
+                m_AudioSource.volume = 1;
+            }
             m_AudioSource.PlayOneShot(m_AudioSource.clip);
             // move picked sound to index 0 so it's not picked next time
             m_FootstepSounds[n] = m_FootstepSounds[0];
