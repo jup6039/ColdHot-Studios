@@ -93,7 +93,11 @@ public class ProjectileTool : Tool
                     {
                         for (int i = 0; i < hitObjects.Count; i++)
                         {
-                            Debug.Log(hitObjects[i]);
+                            Sprayable hitSpray;
+                            if(hitSpray = hitObjects[i].GetComponent<Sprayable>())
+                            {
+                                hitSpray.Shot();
+                            }
                         }
                     }
                     //remove all objects from list after calling them

@@ -13,6 +13,9 @@ public class InteractableObject : MonoBehaviour
     //boolean value stores whether the gameobjects interaction has been voided and is no longer available
     private bool interactionVoided;
 
+    //boolean value that stores whether the object is a player interactable, defaults to true, if false player cannot access with mouse and e
+    [SerializeField] bool standardInteractable = true;
+
     //the materials object color before being highlighted
     private Color startcolor;
 
@@ -80,17 +83,23 @@ public class InteractableObject : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        startcolor = renderer.material.color;
-        renderer.material.color = new Color(2, 2, 0);
-        this.gameObject.tag = "mouseOver";
+        if (standardInteractable)
+        {
+            startcolor = renderer.material.color;
+            renderer.material.color = new Color(2, 2, 0);
+            this.gameObject.tag = "mouseOver";
+        }
     }
 
     private void OnMouseExit()
     {
-        renderer.material.color = startcolor;
-        if (this.gameObject.tag == "mouseOver")
+        if (standardInteractable)
         {
-            this.gameObject.tag = "Untagged";
+            renderer.material.color = startcolor;
+            if (this.gameObject.tag == "mouseOver")
+            {
+                this.gameObject.tag = "Untagged";
+            }
         }
     }
 }
