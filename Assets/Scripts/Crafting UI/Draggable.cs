@@ -4,13 +4,13 @@ using UnityEngine.EventSystems;
 public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     private Vector2 lastMousePosition;
-    private Vector2 originalPosition;
-    [HideInInspector] public bool isinDropArea;
+    [HideInInspector] public Vector2 originalPosition;
+    public bool isInDropArea;
 
     void Start()
     {
         originalPosition = this.GetComponent<RectTransform>().position;
-        isinDropArea = false;
+        isInDropArea = false;
     }
 
     // begin drag
@@ -19,12 +19,14 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     {
         Debug.Log("Begin Drag");
         lastMousePosition = eventData.position;
-        isinDropArea = false;
+        isInDropArea = false;
     }
 
     // drag object
     public void OnDrag(PointerEventData eventData)
     {
+        isInDropArea = false;
+
         Vector2 currentMousePosition = eventData.position;
         Vector2 diff = currentMousePosition - lastMousePosition;
         RectTransform rect = GetComponent<RectTransform>();
@@ -44,7 +46,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("End Drag");
-        if (isinDropArea == false)
+        //this.GetComponent<RectTransform>().position = originalPosition;
+        if (isInDropArea == false)
         {
             this.GetComponent<RectTransform>().position = originalPosition;
         }

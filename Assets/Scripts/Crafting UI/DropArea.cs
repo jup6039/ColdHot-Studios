@@ -8,21 +8,23 @@ public class DropArea : MonoBehaviour
     public GameObject sceneManager;
 
     private List<GameObject> draggables;
+    //[HideInInspector] public bool isOccupied;
 
     void Start()
     {
         draggables = sceneManager.GetComponent<UIManager>().draggables;
+        //isOccupied = false;
     }
 
     void Update()
     {
         foreach (GameObject item in draggables)
         {
-            if (this.GetComponent<BoxCollider2D>().bounds.Contains(item.transform.position))
+            if (this.GetComponent<BoxCollider2D>().bounds.Contains(item.transform.position) /*&& isOccupied == false*/)
             {
-                item.GetComponent<Draggable>().isinDropArea = true;
+                item.GetComponent<Draggable>().isInDropArea = true;
                 item.GetComponent<RectTransform>().position = this.transform.position;
-                item.transform.SetParent(this.transform);
+                //isOccupied = true;
             }
         }
     }
