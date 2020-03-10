@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public Button ironButton;
     public GameObject player;
     public GameObject textPrompt;
+    public GameObject needMorePrompt;
     public GameObject modPanel;
     public GameObject modPrefab;
     public GameObject goldPanel;
@@ -44,6 +45,7 @@ public class UIManager : MonoBehaviour
 
         // set all panels and buttons to be invisible
         textPrompt.SetActive(false);
+        needMorePrompt.SetActive(false);
         moddingMenu.SetActive(false);
         craftingMenu.SetActive(false);
         modButton.gameObject.SetActive(false);
@@ -181,12 +183,14 @@ public class UIManager : MonoBehaviour
     {
         goldPanel.SetActive(true);
         ironPanel.SetActive(false);
+        needMorePrompt.SetActive(false);
     }
 
     void IronReveal()
     {
         goldPanel.SetActive(false);
         ironPanel.SetActive(true);
+        needMorePrompt.SetActive(false);
     }
 
     // whenever a new mod is created, another mod icon is added to the list
