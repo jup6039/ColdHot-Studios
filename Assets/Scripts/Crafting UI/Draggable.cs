@@ -20,12 +20,14 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
         Debug.Log("Begin Drag");
         lastMousePosition = eventData.position;
         isInDropArea = false;
+        Cursor.visible = false;
     }
 
     // drag object
     public void OnDrag(PointerEventData eventData)
     {
         isInDropArea = false;
+        Cursor.visible = false;
 
         Vector2 currentMousePosition = eventData.position;
         Vector2 diff = currentMousePosition - lastMousePosition;
@@ -46,6 +48,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("End Drag");
+        Cursor.visible = true;
         //this.GetComponent<RectTransform>().position = originalPosition;
         if (isInDropArea == false)
         {
