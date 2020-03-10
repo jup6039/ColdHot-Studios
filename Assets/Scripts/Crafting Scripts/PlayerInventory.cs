@@ -36,6 +36,7 @@ public class PlayerInventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             AddToInventory("gold", 100);
+            AddToInventory("nozzleBase", 1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -150,6 +151,8 @@ public class PlayerInventory : MonoBehaviour
             }
 
             AddToInventory(output.modKey);
+
+            sceneManager.GetComponent<UIManager>().AddToModList();
 
             //playerMods.Add(output); for list version
         }
