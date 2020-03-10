@@ -37,14 +37,17 @@ public class PlayerInventory : MonoBehaviour
         {
             AddToInventory("gold", 100);
             AddToInventory("nozzleBase", 1);
+            sceneManager.GetComponent<UIManager>().UpdateInventory();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             AddToInventory("iron", 200);
+            sceneManager.GetComponent<UIManager>().UpdateInventory();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             AddToInventory("brass", 100);
+            sceneManager.GetComponent<UIManager>().UpdateInventory();
         }
 
         if (Input.GetKeyDown(KeyCode.M))
@@ -152,7 +155,9 @@ public class PlayerInventory : MonoBehaviour
 
             AddToInventory(output.modKey);
 
+            // UI stuff
             sceneManager.GetComponent<UIManager>().AddToModList();
+            sceneManager.GetComponent<UIManager>().UpdateInventory();
 
             //playerMods.Add(output); for list version
         }
@@ -183,6 +188,9 @@ public class PlayerInventory : MonoBehaviour
             }
 
             playerTools.Add(output);
+
+            // UI stuff
+            sceneManager.GetComponent<UIManager>().UpdateInventory();
         }
         else if (hasTool)
         {

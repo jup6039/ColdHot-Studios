@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     public GameObject needMorePrompt;
     public GameObject modPanel;
     public GameObject modPrefab;
+    public GameObject matPanel;
+    public GameObject matPrefab;
     public GameObject goldPanel;
     public GameObject ironPanel;
     public Sprite borderImage;
@@ -25,7 +27,9 @@ public class UIManager : MonoBehaviour
     private bool isPaused;
     private bool canCraft;
     private int modListPosition;
+    private int matListPosition;
     private Dictionary<string, int> playerMods;
+    private Dictionary<string, int> materialInventory;
 
     // for testing purposes only
     //public List<GameObject> mods;
@@ -36,6 +40,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         modListPosition = 0;
+        matListPosition = 0;
         Time.timeScale = 1;
 
         // find menu panels
@@ -64,6 +69,7 @@ public class UIManager : MonoBehaviour
         Cursor.visible = false;
 
         playerMods = player.GetComponent<PlayerInventory>().playerMods;
+        materialInventory = player.GetComponent<PlayerInventory>().materialInventory;
 
         // create panel list of all available mods
         foreach (KeyValuePair<string, int> entry in playerMods)
@@ -77,28 +83,21 @@ public class UIManager : MonoBehaviour
             draggables.Add(newMod);
 
             modListPosition++;
+        }
 
-            // create panel for mod
-            /*GameObject newPanel = new GameObject();
-            newPanel.transform.SetParent(modPanel.transform);
-            
-            Image panelImage = newPanel.AddComponent<Image>();
-            panelImage.sprite = borderImage;
+        // create panel list of material inventory
+        foreach (KeyValuePair<string, int> entry in materialInventory)
+        {
+            GameObject newMat = Instantiate(matPrefab);
+            newMat.transform.SetParent(matPanel.transform);
 
-            RectTransform panelTransform = newPanel.GetComponent<RectTransform>();
-            panelTransform.anchoredPosition = new Vector2((100 * i) - 400, 0);
+            RectTransform matTransform = newMat.GetComponent<RectTransform>();
+            matTransform.anchoredPosition = new Vector2(0, (120 * -matListPosition) + 80);
 
-            // create mod
-            GameObject newMod = new GameObject();
-            newMod.transform.SetParent(newPanel.transform);
-            Image newImage = newMod.AddComponent<Image>();
-            newImage.sprite = testMod;
-            newMod.AddComponent<Draggable>();
+            GameObject matChild = newMat.transform.GetChild(0).gameObject;
+            matChild.GetComponent<Text>().text = entry.Key + " " + entry.Value;
 
-            RectTransform modTransform = newMod.GetComponent<RectTransform>();
-            modTransform.anchoredPosition = new Vector2(0, 0);
-
-            newMod.transform.localScale -= new Vector3(0.75f, 0.75f, 0.75f);*/
+            matListPosition++;
         }
     }
 
@@ -209,5 +208,29 @@ public class UIManager : MonoBehaviour
 
         modListPosition++;
         Debug.Log(modListPosition);
+    }
+
+    public void UpdateInventory()
+    {
+        matListPosition = 0;
+
+        foreach (Transform child in matPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (KeyValuePair<string, int> entry in materialInventory)
+        {
+            GameObject newMat = Instantiate(matPrefab);
+            newMat.transform.SetParent(matPanel.transform);
+
+            RectTransform matTransform = newMat.GetComponent<RectTransform>();
+            matTransform.anchoredPosition = new Vector2(0, (120 * -matListPosition) + 80);
+
+            GameObject matChild = newMat.transform.GetChild(0).gameObject;
+            matChild.GetComponent<Text>().text = entry.Key + " " + entry.Value;
+
+            matListPosition++;
+        }
     }
 }
