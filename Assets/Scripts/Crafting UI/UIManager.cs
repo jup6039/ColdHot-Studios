@@ -48,6 +48,11 @@ public class UIManager : MonoBehaviour
         craftingMenu = GameObject.FindGameObjectWithTag("CraftingMenu");
         workbenches = GameObject.FindGameObjectsWithTag("Workbench");
 
+        foreach(GameObject bench in workbenches)
+        {
+            Debug.Log("bench found!");
+        }
+
         // set all panels and buttons to be invisible
         textPrompt.SetActive(false);
         needMorePrompt.SetActive(false);
@@ -106,10 +111,12 @@ public class UIManager : MonoBehaviour
     {
         foreach (GameObject bench in workbenches)
         {
-            if (bench.GetComponent<BoxCollider>().bounds.Contains(player.transform.position))
+            if (bench.GetComponent<BoxCollider>().bounds.Contains(player.transform.position) && Time.timeScale == 1)
             {
                 textPrompt.SetActive(true);
                 canCraft = true;
+                Debug.Log("collision");
+                break;
             }
             else
             {
@@ -118,9 +125,9 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            if (Time.timeScale == 1 && isPaused == false /*&& canCraft == true*/)
+            if (Time.timeScale == 1 && isPaused == false && canCraft == true)
             {
                 // unlock cursor
                 Cursor.lockState = CursorLockMode.None;
@@ -151,6 +158,7 @@ public class UIManager : MonoBehaviour
                 Debug.Log("high");
                 Time.timeScale = 1;
                 isPaused = false;
+                textPrompt.SetActive(false);
                 moddingMenu.SetActive(false);
                 craftingMenu.SetActive(false);
                 modButton.gameObject.SetActive(false);
@@ -167,6 +175,7 @@ public class UIManager : MonoBehaviour
         modPanel.SetActive(true);
         testPanel.SetActive(true);
         craftingMenu.SetActive(false);
+        textPrompt.SetActive(false);
     }
 
     void SwitchToCraft()
@@ -176,6 +185,7 @@ public class UIManager : MonoBehaviour
         modPanel.SetActive(false);
         testPanel.SetActive(false);
         craftingMenu.SetActive(true);
+        textPrompt.SetActive(false);
     }
 
     void GoldReveal()

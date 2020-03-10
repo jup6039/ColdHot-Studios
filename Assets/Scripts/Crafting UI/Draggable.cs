@@ -14,7 +14,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     {
         originalPosition = this.GetComponent<RectTransform>().position;
         isInDropArea = false;
-        tool = GameObject.Find("tool");
+        tool = GameObject.Find("Tool");
     }
 
     // begin drag
