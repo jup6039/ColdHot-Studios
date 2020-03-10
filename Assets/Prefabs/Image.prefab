@@ -89,6 +89,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalPosition: {x: 0, y: 0}
   isInDropArea: 0
+  tool: {fileID: 0}
 --- !u!61 &7024187129241698393
 BoxCollider2D:
   m_ObjectHideFlags: 0

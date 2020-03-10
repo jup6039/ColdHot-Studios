@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
@@ -6,11 +8,13 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     private Vector2 lastMousePosition;
     [HideInInspector] public Vector2 originalPosition;
     public bool isInDropArea;
+    public GameObject tool;
 
     void Start()
     {
         originalPosition = this.GetComponent<RectTransform>().position;
         isInDropArea = false;
+        tool = GameObject.Find("tool");
     }
 
     // begin drag
@@ -53,6 +57,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
         if (isInDropArea == false)
         {
             this.GetComponent<RectTransform>().position = originalPosition;
+        }
+        else if (isInDropArea == true)
+        {
+            tool.GetComponent<Tool>().FillSlot(new Mods(Slot.slotType.nozzle, "iron", new List<string>()));
         }
     }
 
