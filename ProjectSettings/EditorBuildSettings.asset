@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level1Graybox.unity
     guid: 7816e3809393cbd4dbcc0a48fc3cec58
+  - enabled: 1
+    path: Assets/Scenes/ParkourLevel.unity
+    guid: f7150685b4fa0054fa6ed70c2b198142
   m_configObjects: {}

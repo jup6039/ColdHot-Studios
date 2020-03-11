@@ -33,7 +33,7 @@ public class PlayerInventory : MonoBehaviour
     void Update()
     {
         // Test Resource Adding
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        /*if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             AddToInventory("gold", 100);
             AddToInventory("nozzleBase", 1);
@@ -48,9 +48,9 @@ public class PlayerInventory : MonoBehaviour
         {
             AddToInventory("brass", 100);
             sceneManager.GetComponent<UIManager>().UpdateInventory();
-        }
+        }*/
 
-        if (Input.GetKeyDown(KeyCode.M))
+        /*if (Input.GetKeyDown(KeyCode.M))
         {
             if (testCraft % 2 == 0)
             {
@@ -76,7 +76,7 @@ public class PlayerInventory : MonoBehaviour
             }
             testCraft++;
             sceneManager.GetComponent<UIManager>().AddToModList();
-        }
+        }*/
 
         // on press of key P
         if (Input.GetKeyDown(KeyCode.P))
