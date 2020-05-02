@@ -34,6 +34,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
         [SerializeField] private Tool activeTool;
+        [SerializeField] private float detectionRadiusModifier;
+        public float detectionRadius;
 
         private Camera m_Camera;
         //private bool m_Jump;
@@ -437,28 +439,35 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 case moveState.walking:
                     speed = m_WalkSpeed;
+                    detectionRadius = detectionRadiusModifier;
                     break;
                 case moveState.running:
                     speed = m_RunSpeed;
+                    detectionRadius = detectionRadiusModifier * 2;
                     break;
                 case moveState.crouching:
                     speed = m_WalkSpeed / 2.0f;
+                    detectionRadius = detectionRadiusModifier * 0.5f;
                     break;
                 case moveState.jumping:
                     //decide speed based on runjump
                     if(runJump)
                     {
                         speed = m_RunSpeed * 0.8f;
+                        detectionRadius = detectionRadiusModifier * 2;
                     }
                     else
                     {
                         speed = m_WalkSpeed * 0.8f;
+                        detectionRadius = detectionRadiusModifier * 2;
                     }
                     break;
                 case moveState.climbing:
+                    detectionRadius = detectionRadiusModifier;
                     speed = 0;
                     break;
                 case moveState.sliding:
+                    detectionRadius = detectionRadiusModifier * 1.5f;
                     speed = m_RunSpeed * 2.0f;
                     break;
             }
