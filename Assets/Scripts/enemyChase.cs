@@ -15,10 +15,13 @@ public class enemyChase : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float m_StickToGroundForce;
     [SerializeField] private float m_GravityMultiplier;
+    [SerializeField] private Vector3 wanderMin;
+    [SerializeField] private Vector3 wanderMax;
     private chaseState enemyState = chaseState.wander;
     private GameObject player;
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController controller;
     private Animator drakeAnimation;
+
 
 
     // Start is called before the first frame update
@@ -90,7 +93,14 @@ public class enemyChase : MonoBehaviour
         RaycastHit stopMovementHit;
         if(Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), toMovenoY, out stopMovementHit, 3))
         {
-            enemyState = chaseState.howl;
+            if (enemyState == chaseState.chase)
+            {
+                enemyState = chaseState.howl;
+            }
+            else
+            {
+                futurePosition = new Vector3(Random.Range(0, 50), 0, Random.Range(0, 50));
+            }
             toMove.x = 0;
             toMove.z = 0;
             Debug.Log(stopMovementHit.collider.tag);
@@ -119,7 +129,7 @@ public class enemyChase : MonoBehaviour
         if (futurePosition == Vector3.zero || (futurePosition - transform.position).magnitude < 5)
         {
             //get random futurepositions
-            futurePosition = new Vector3(Random.Range(0, 50), 0, Random.Range(0, 50));
+            futurePosition = new Vector3(Random.Range(wanderMin.x, wanderMax.x), 0, Random.Range(wanderMin.z, wanderMax.z));
         }
         //offset the point being sought by a small amount
         Vector3 wanderPosition = futurePosition;
