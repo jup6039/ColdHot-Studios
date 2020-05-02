@@ -31,6 +31,7 @@ public class enemyChase : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         controller = player.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         drakeAnimation = thisGameObject.GetComponent<Animator>();
+        drakeAnimation.SetBool("CanFollow", true);
     }
 
     // Update is called once per frame
@@ -97,9 +98,10 @@ public class enemyChase : MonoBehaviour
 
         thisController.Move(toMove);
 
-        Vector3 rotateDirection = (moveDir * Time.deltaTime).normalized;
-        Vector3 newRotation = new Vector3(0f, Mathf.Atan2(rotateDirection.z, rotateDirection.x) * Mathf.Rad2Deg, 0f);
-        transform.Rotate(newRotation);
+        if (toMovenoY != Vector3.zero)
+        {
+            transform.forward = toMovenoY.normalized;
+        }
     }
 
     //seek method follows in a line towards sought thing
