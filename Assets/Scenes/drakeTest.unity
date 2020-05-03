@@ -435,6 +435,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1287466450, guid: 88e7f1861f66e8547bfd6c40fbd078c5, type: 3}
+      propertyPath: wanderMax.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287466450, guid: 88e7f1861f66e8547bfd6c40fbd078c5, type: 3}
+      propertyPath: wanderMax.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287466450, guid: 88e7f1861f66e8547bfd6c40fbd078c5, type: 3}
+      propertyPath: wanderMax.z
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 5549503650028466897, guid: 88e7f1861f66e8547bfd6c40fbd078c5,
         type: 3}
       propertyPath: m_LocalPosition.x
