@@ -333,7 +333,7 @@ public class PlayerInventory : MonoBehaviour
         if (!playerTools.Contains(_tool))
         {
             playerTools.Add(_tool);
-            //this.gameObject.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().    FIX THIS LATER
+            this.gameObject.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().ActiveTool = _tool;  // set the tool as active by default
         }
 
         // if not, add it to the list

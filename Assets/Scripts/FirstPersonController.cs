@@ -37,6 +37,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private float detectionRadiusModifier;
         public float detectionRadius;
 
+        //Getter/setter for activeTool
+        public Tool ActiveTool { get { return activeTool; } set { activeTool = value; } } // used to set the tool in playerInventory
+
         private Camera m_Camera;
         //private bool m_Jump;
         private float timeSlid = 0;
