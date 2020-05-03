@@ -330,6 +330,11 @@ public class PlayerInventory : MonoBehaviour
     public void AddToInventory(Tool _tool)
     {
         // check to see if the tool is in the list already (?)
+        if (!playerTools.Contains(_tool))
+        {
+            playerTools.Add(_tool);
+            //this.gameObject.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().    FIX THIS LATER
+        }
 
         // if not, add it to the list
     }
